@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ToxDroid</string>
+    <string name="placeholder">Lorem ipsum</string>
+    
+    <!-- Friends -->
+    <string name="avatar">Avatar</string>
+    <string name="add_friend">Add friend</string>
+    <string name="search">Search</string>
+    <string name="search_friends">Search friends</string>
+    <string name="send">Send</string>
+    <string name="message_send_fail">Unable to send. Please check your Internet connection.</string>
+    <string name="activity_chat_load_fail">This conversation could not be loaded</string>
+    <string name="add_identity">Add account</string>
+    <string name="login">Login</string>
+    <string name="delete">Delete</string>
+    <string name="identity_list_blurb">Welcome to ToxDroid! Select an account to login.</string>
+    <string name="friend_list">Friend List</string>
+    <string name="identities">Identities</string>
+    <string name="login_failed_generic">Unable to login</string>
+    <string name="create">Create</string>
+    <string name="name">Name</string>
+    <string name="create_identity">Create account</string>
+    <string name="cancel">Cancel</string>
+    <string name="public_key">Public key</string>
+    <string name="nospam">Nospam value</string>
+    <string name="create_identity_failed">Failed to create new identity</string>
+    <string name="address">Address</string>
+    <string name="internet_unavailable">Unable to connect to the Internet; please check your connection</string>
+    <string name="welcome">Welcome to ToxDroid</string>
+    <string name="message">Message</string>
+    <string name="user_create_invalid_params">That address is too short</string>
+    <string name="friend_already_added">That person is already added as a friend</string>
+    <string name="friend_own_key">You cannot add yourself as a friend!</string>
+    <string name="friend_new_nospam">That person has changed their nospam value</string>
+    <string name="friend_bad_checksum">Sorry, that address is invalid</string>
+    <string name="friend_not_online">You cannot chat with offline users</string>
+
+</resources>
