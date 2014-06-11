@@ -33,7 +33,7 @@ public class TextChatFragment extends Fragment implements TextWatcher {
         messageHistory = (ListView) v.findViewById(R.id.messages);
         messageInput = (TextView) v.findViewById(R.id.message_input);
         submitBtn = (Button) v.findViewById(R.id.send_message);
-        adapter = new ArrayAdapter<Message>(this.getActivity(), android.R.layout.simple_list_item_1);
+        adapter = new ArrayAdapter<Message>(this.getActivity(), R.layout.fragment_message);
         
         messageHistory.setAdapter(adapter);
         

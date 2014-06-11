@@ -36,5 +36,6 @@
     <string name="friend_new_nospam">That person has changed their nospam value</string>
     <string name="friend_bad_checksum">Sorry, that address is invalid</string>
     <string name="friend_not_online">You cannot chat with offline users</string>
+    <string name="home">Home</string>
 
 </resources>

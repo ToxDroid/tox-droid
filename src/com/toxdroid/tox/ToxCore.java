@@ -105,6 +105,8 @@ public class ToxCore {
             // Load last DHT, friend list, key details etc...
             jtox = new JTox<ToxFriend>(data, friends, callbacks);
         
+        Log.i(TAG, identity + "'s tox ID " + jtox.getAddress());
+        
         jtox.setName(identity.getName());
         startService(ctx); // Log back in as the new identity
     }

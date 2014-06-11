@@ -5,10 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="top"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" >
+    android:paddingBottom="@dimen/activity_vertical_margin" >
 
     <EditText
         android:id="@+id/message_input"
@@ -18,7 +15,8 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/send_message"
         android:ems="10"
-        android:inputType="textMultiLine" >
+        android:inputType="textMultiLine"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin" >
     </EditText>
 
     <ListView
@@ -27,6 +25,14 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/send_message"
         android:layout_alignParentLeft="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:background="@color/bg_chat_history"
+        android:divider="@android:color/transparent"
+  		android:dividerHeight="10.0dp"
         android:transcriptMode="alwaysScroll" >
         
         <requestFocus />
@@ -40,6 +46,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/message_input"
-        android:text="@string/send" />
+        android:text="@string/send"
+        android:layout_marginRight="@dimen/activity_horizontal_margin" />
 
 </RelativeLayout>
