@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg_identity_card">#999</color>
+    <color name="bg_button_dark">#231f20</color>
     <color name="white">#FFF</color>
     <color name="bg_chat_history">#DDD</color>
+    <color name="bg_button_light">#292425</color>
+    <color name="fg_highlight">#789ead</color>
+    <color name="fg_highlight_darker">#678f9c</color>
     
 </resources>

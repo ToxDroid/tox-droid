@@ -16,6 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/card_status_indicator"
         android:text="@string/placeholder"
+        android:textColor="@android:color/black"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -26,6 +27,7 @@
         android:layout_alignRight="@+id/card_name"
         android:layout_below="@+id/card_name"
         android:text="@string/placeholder"
+        android:textColor="@android:color/darker_gray"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <ImageView

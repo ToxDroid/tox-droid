@@ -26,8 +26,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.FriendListActivity"
-            android:label="@string/friend_list" >
+            android:name=".activity.HomeActivity"
+            android:label="@string/home" >
         </activity>
         <activity 
             android:name=".activity.ChatActivity"

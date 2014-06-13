@@ -17,28 +17,25 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 /**
- * The main activity (first activity to start) which allows users to select an identity.
- * 
+ * The main activity (first activity to start) which allows users to manage identities and login
+ * to the Tox network. 
  * 
  */
-public class LoginActivity extends FragmentActivity implements OnItemClickListener, OnClickListener {
+public class LoginActivity extends FragmentActivity implements OnItemClickListener {
     private ListView identities;
-    private Button addIdentityBtn;
     private ArrayAdapter<Identity> adapter;
     
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.fragment_login);
         
         adapter = new ArrayAdapter<Identity>(this, android.R.layout.simple_list_item_1, new ArrayList<Identity>(App
                 .get(this).getIdentityManager().getIdentities()));
@@ -46,38 +43,7 @@ public class LoginActivity extends FragmentActivity implements OnItemClickListen
         identities = (ListView) findViewById(R.id.identities);
         identities.setAdapter(adapter);
         
-        addIdentityBtn = (Button) findViewById(R.id.add_identity);
-        
-        addIdentityBtn.setOnClickListener(this);
         identities.setOnItemClickListener(this);
-    }
-    
-    /*
-     * Listener callbacks
-     */
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // On list item tapped, login
-        final Identity identity = (Identity) parent.getItemAtPosition(position);
-        newLoginTask().execute(identity);
-    }
-    
-    @Override
-    public void onClick(View v) {
-        // On create new identity button pressed, show dialog
-        Bundle b = new Bundle();
-        b.putInt(CreateUserDialog.ARG_USERTYPE, CreateUserDialog.CREATE_LOCAL_IDENTITY);
-        
-        CreateUserDialog dialog = new CreateUserDialog();
-        dialog.setArguments(b);
-        dialog.setOnCreateIdentityListener(new OnCreateIdentityListener() {
-            
-            @Override
-            public void call(DialogFragment dialog, String name) {
-                newCreateIdentityTask().execute(name);
-            }
-        });
-        dialog.show(getSupportFragmentManager(), "add_friend_dialog");
     }
     
     /**
@@ -93,7 +59,7 @@ public class LoginActivity extends FragmentActivity implements OnItemClickListen
             
             @Override
             protected void onSuccess(Void result) {
-                startActivity(new Intent(LoginActivity.this, FriendListActivity.class));
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             }
             
             @Override
@@ -129,5 +95,32 @@ public class LoginActivity extends FragmentActivity implements OnItemClickListen
                 Toast.makeText(LoginActivity.this, R.string.create_identity_failed, Toast.LENGTH_SHORT).show();
             }
         };
+    }
+    
+    /*
+     * Listener callbacks
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // On list item tapped, login
+        final Identity identity = (Identity) parent.getItemAtPosition(position);
+        newLoginTask().execute(identity);
+    }
+    
+    public void onAddIdentityClick(View v) {
+        // On create new identity button pressed, show dialog
+        Bundle b = new Bundle();
+        b.putInt(CreateUserDialog.ARG_USERTYPE, CreateUserDialog.CREATE_LOCAL_IDENTITY);
+        
+        CreateUserDialog dialog = new CreateUserDialog();
+        dialog.setArguments(b);
+        dialog.setOnCreateIdentityListener(new OnCreateIdentityListener() {
+            
+            @Override
+            public void call(DialogFragment dialog, String name) {
+                newCreateIdentityTask().execute(name);
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "add_friend_dialog");
     }
 }

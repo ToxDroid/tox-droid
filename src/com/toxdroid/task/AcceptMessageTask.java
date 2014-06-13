@@ -4,36 +4,31 @@ package com.toxdroid.task;
 import java.util.concurrent.TimeUnit;
 
 import com.toxdroid.App;
-import com.toxdroid.activity.ChatActivity;
 import com.toxdroid.data.Database;
 import com.toxdroid.data.Message;
 import com.toxdroid.tox.ToxFriend;
+import com.toxdroid.ui.ChatFragment;
 import com.toxdroid.util.CheckedAsyncTask;
 import com.toxdroid.util.Util;
 
-import android.widget.ListView;
-
-public class AcceptMessageTask extends CheckedAsyncTask<Void, Void, Message> {
-    private ChatActivity activity;
-    private ToxFriend friend;
-    private String body;
+public class AcceptMessageTask extends CheckedAsyncTask<Object, Void, Message> {
+    private ChatFragment fragment;
     
-    public AcceptMessageTask(ChatActivity activity, ToxFriend friend, String body) {
-        this.activity = activity;
-        this.friend = friend;
-        this.body = body;
+    public AcceptMessageTask(ChatFragment fragment) {
+        this.fragment = fragment;
     }
     
     @Override
-    public Message checkedDoInBackground(Void... params) throws Exception {
-        App app = App.get(activity);
-        Database db = app.getDatabase();
+    public Message checkedDoInBackground(Object... params) throws Exception {
+        ToxFriend friend = (ToxFriend) params[0];
+        String body = (String) params[1];
+        Database db = App.get(fragment.getActivity()).getDatabase();
         
         Message message = new Message();
         message.setBody(body);
-        message.setChat(activity.getChat().getId());
+        message.setChat(fragment.getChat().getId());
         message.setSender(friend.getUserId());
-        message.setPosition(activity.getAndIncrementNextMessagePosition());
+        message.setPosition(fragment.nextMessagePos());
         message.setTimestamp(Util.timeAsISO8601());
         message.setId(db.insert(message).get(db.getDefaultTimeout(), TimeUnit.MILLISECONDS));
         
@@ -43,6 +38,6 @@ public class AcceptMessageTask extends CheckedAsyncTask<Void, Void, Message> {
     
     @Override
     protected void onSuccess(Message result) {
-        activity.getFragment().getMessageListAdapter().add(result);
+        fragment.appendToHistory(result);
     }
 }

@@ -3,24 +3,57 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" >
-
-    <fragment
-        android:id="@+id/fragment1"
-        android:name="com.toxdroid.ui.UserCardFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    android:orientation="vertical" >
 
     <ListView
-        android:id="@+id/friends_list"
+        android:id="@+id/friend_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_weight="1"
         android:divider="?android:attr/listDivider" >
-
     </ListView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageButton
+            android:id="@+id/ImageButton01"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/bg_button_dark"
+            android:scaleType="center"
+            android:src="@drawable/ic_action_social_add_person"
+            android:contentDescription="@string/add_friend"
+            android:onClick="onAddFriendClick" />
+
+        <ImageButton
+            android:id="@+id/ImageButton02"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/bg_button_dark"
+            android:contentDescription="@null" />
+
+        <ImageButton
+            android:id="@+id/ImageButton03"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/bg_button_dark"
+            android:contentDescription="@string/settings"
+            android:src="@drawable/ic_action_action_settings"
+            android:onClick="onSettingsClick" />
+
+    </LinearLayout>
 </LinearLayout>

@@ -2,33 +2,31 @@
 package com.toxdroid.task;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.toxdroid.App;
 import com.toxdroid.R;
-import com.toxdroid.activity.ChatActivity;
 import com.toxdroid.data.Chat;
 import com.toxdroid.data.Database;
 import com.toxdroid.data.DatabaseHelper;
 import com.toxdroid.data.Message;
-import com.toxdroid.ui.TextChatFragment;
+import com.toxdroid.ui.ChatFragment;
 import com.toxdroid.util.CheckedAsyncTask;
 import com.toxdroid.util.Util;
 
 import android.database.Cursor;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 public class LoadChatTask extends CheckedAsyncTask<Long, Void, List<Message>> {
     private static final String TAG = "LoadChatTask";
+    private ChatFragment fragment;
     private Database db;
-    private ChatActivity activity;
     
-    public LoadChatTask(ChatActivity activity, Database db) {
-        this.activity = activity;
-        this.db = db;
+    public LoadChatTask(ChatFragment fragment) {
+        this.fragment = fragment;
+        this.db = App.get(fragment.getActivity()).getDatabase();
     }
     
     @Override
@@ -59,7 +57,7 @@ public class LoadChatTask extends CheckedAsyncTask<Long, Void, List<Message>> {
             while (cursor.moveToNext())
                 messages.add(new Message(cursor));
             
-            activity.setChat(chat);
+            fragment.setChat(chat);
         } finally {
             if (cursor != null && !cursor.isClosed())
                 cursor.close();
@@ -70,24 +68,10 @@ public class LoadChatTask extends CheckedAsyncTask<Long, Void, List<Message>> {
     
     @Override
     public void onSuccess(List<Message> messageHistory) {
-        TextChatFragment frag = activity.getFragment();
-        
-        ArrayAdapter<Message> adapter = frag.getMessageListAdapter();
-        adapter.clear();
-        
-        Log.v(TAG, Arrays.toString(messageHistory.toArray()));
+        fragment.clearHistory();
         
         for (Message m : messageHistory)
-            adapter.add(m);
-        
-        frag.getSubmitBtn().setEnabled(true);
-        
-        if (!messageHistory.isEmpty())
-            activity.setNextMessagePosition(messageHistory.get(messageHistory.size() - 1).getPosition());
-        else
-            activity.setNextMessagePosition(0);
-        
-        activity.setReady(true);
+            fragment.appendToHistory(m);
         
         Log.d(TAG, "Message history loaded successfully");
     }
@@ -95,8 +79,6 @@ public class LoadChatTask extends CheckedAsyncTask<Long, Void, List<Message>> {
     @Override
     public void onFailure(Exception e) {
         super.onFailure(e);
-        
-        Toast.makeText(activity, R.string.activity_chat_load_fail, Toast.LENGTH_SHORT).show();
-        activity.finish();
+        Toast.makeText(fragment.getActivity(), R.string.activity_chat_load_fail, Toast.LENGTH_SHORT).show();
     }
 };

@@ -1,6 +1,8 @@
 
 package com.toxdroid.util;
 
+import im.tox.jtoxcore.ToxUserStatus;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,11 +10,18 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.google.common.io.ByteStreams;
+import com.toxdroid.R;
+import com.toxdroid.data.User;
 
 /**
  * Helpful and assorted methods.
@@ -44,7 +53,6 @@ public class Util {
     public static void writeInternalStorage(InputStream in, String filename, Context ctx) throws IOException {
         FileOutputStream out = null;
         try {
-            // FIXME Permission denied exception
             // assets/Nodefile > data/Nodefile
             out = ctx.openFileOutput(filename, Context.MODE_PRIVATE);
             ByteStreams.copy(in, out);
@@ -138,5 +146,39 @@ public class Util {
      */
     public static String timeAsISO8601() {
         return timeAsISO8601(new Date());
+    }
+    
+    /**
+     * Initializes a user card view.
+     * @param v the view (type = {@link R.layout.user_card})
+     * @param item the user
+     * @return the view
+     */
+    public static View newUserCard(View v, User user) {
+        if (user == null)
+            return v;
+        
+        TextView name = (TextView) v.findViewById(R.id.card_name);
+        TextView statusMessage = (TextView) v.findViewById(R.id.card_status_message);
+        ImageView statusIcon = (ImageView) v.findViewById(R.id.card_status_indicator);
+        
+        name.setText(user.getName());
+        statusMessage.setText(user.getStatusMessage());
+        
+        int icon;
+        ToxUserStatus status = user.getStatus();
+        if (user.isOnline()) {
+            if (status == ToxUserStatus.TOX_USERSTATUS_AWAY)
+                icon = R.drawable.ic_away;
+            else if (status == ToxUserStatus.TOX_USERSTATUS_BUSY)
+                icon = R.drawable.ic_busy;
+            else
+                icon = R.drawable.ic_online;
+        } else {
+            icon = R.drawable.ic_offline;
+        }
+        statusIcon.setImageResource(icon);
+        
+        return v;
     }
 }

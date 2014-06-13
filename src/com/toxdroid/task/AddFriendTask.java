@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.toxdroid.App;
 import com.toxdroid.R;
-import com.toxdroid.activity.FriendListActivity;
 import com.toxdroid.tox.ToxFriend;
 import com.toxdroid.util.CheckedAsyncTask;
 
@@ -15,25 +14,22 @@ import com.toxdroid.util.CheckedAsyncTask;
  *
  *
  */
-public class AddFriendTask extends CheckedAsyncTask<Object, Void, ToxFriend> {
-    private FriendListActivity activity;
+public class AddFriendTask extends CheckedAsyncTask<String, Void, ToxFriend> {
+    private App app;
     
-    public AddFriendTask(FriendListActivity activity) {
-        this.activity = activity;
+    public AddFriendTask(App app) {
+        this.app = app;
     }
     
     @Override
-    public ToxFriend checkedDoInBackground(Object... params) throws Exception {
-        String address = (String) params[0];
-        String message = (String) params[1];
-        
-        return App.get(activity).getTox().addFriend(address, message);
+    public ToxFriend checkedDoInBackground(String... params) throws Exception {
+        return app.getTox().addFriend(params[0], params[1]);
     }
     
     @Override
     protected void onSuccess(ToxFriend result) {
         if (result == null)
-            Toast.makeText(activity, R.string.friend_already_added, Toast.LENGTH_SHORT).show();
+            Toast.makeText(app, R.string.friend_already_added, Toast.LENGTH_SHORT).show();
     }
     
     @Override
@@ -41,7 +37,7 @@ public class AddFriendTask extends CheckedAsyncTask<Object, Void, ToxFriend> {
         if (e instanceof ToxException) {
             int message = getErrorMessageId(((ToxException) e).getError());
             if (message != -1) {
-                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(app, message, Toast.LENGTH_SHORT).show();
                 return;
             }
         }

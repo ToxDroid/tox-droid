@@ -37,5 +37,7 @@
     <string name="friend_bad_checksum">Sorry, that address is invalid</string>
     <string name="friend_not_online">You cannot chat with offline users</string>
     <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="ok">OK</string>
 
 </resources>

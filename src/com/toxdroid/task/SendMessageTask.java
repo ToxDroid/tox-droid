@@ -2,41 +2,40 @@
 package com.toxdroid.task;
 
 import com.toxdroid.App;
-import com.toxdroid.activity.ChatActivity;
 import com.toxdroid.data.Message;
+import com.toxdroid.tox.ToxCore;
 import com.toxdroid.tox.ToxFriend;
+import com.toxdroid.ui.ChatFragment;
 import com.toxdroid.util.CheckedAsyncTask;
 import com.toxdroid.util.Util;
 
-public class SendMessageTask extends CheckedAsyncTask<Void, Void, Message> {
-    private ChatActivity activity;
-    private ToxFriend friend;
-    private String body;
+public class SendMessageTask extends CheckedAsyncTask<Object, Void, Message> {
+    private ChatFragment fragment;
     
-    public SendMessageTask(ChatActivity activity, ToxFriend friend, String body) {
-        this.activity = activity;
-        this.friend = friend;
-        this.body = body;
+    public SendMessageTask(ChatFragment fragment) {
+        this.fragment = fragment;
     }
     
     @Override
-    public Message checkedDoInBackground(Void... params) throws Exception {
-        App app = App.get(activity);
+    public Message checkedDoInBackground(Object... params) throws Exception {
+        ToxFriend friend = (ToxFriend) params[0];
+        String body = (String) params[1];
         
+        ToxCore tox = App.get(fragment.getActivity()).getTox();
         Message message = new Message();
-        message.setChat(activity.getChat().getId());
+        message.setChat(fragment.getChat().getId());
         message.setBody(body);
-        message.setPosition(activity.getAndIncrementNextMessagePosition());
-        message.setSender(app.getTox().getActiveIdentity().getId());
+        message.setPosition(fragment.nextMessagePos());
+        message.setSender(tox.getActiveIdentity().getId());
         message.setTimestamp(Util.timeAsISO8601());
         
-        app.getTox().sendMessage(friend, message);
+        tox.sendMessage(friend, message);
         return message;
     }
     
     @Override
     protected void onSuccess(Message result) {
-        activity.getFragment().getMessageListAdapter().add(result);
+        fragment.appendToHistory(result);
     }
     
     @Override
@@ -45,5 +44,4 @@ public class SendMessageTask extends CheckedAsyncTask<Void, Void, Message> {
         // TODO Show send failure
         // TODO Mark as failed in database
     }
-    
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import com.toxdroid.R;
 import com.toxdroid.tox.ToxFriend;
 import com.toxdroid.ui.UserCardFragment;
+import com.toxdroid.util.Util;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -19,27 +20,26 @@ import android.widget.ArrayAdapter;
  */
 public class ToxFriendAdapter extends ArrayAdapter<ToxFriend> {
     public ToxFriendAdapter(Context context, List<ToxFriend> objects) {
-        super(context, R.layout.fragment_user_card, objects);
+        super(context, R.layout.user_card, objects);
     }
     
     public ToxFriendAdapter(Context context, ToxFriend[] objects) {
-        super(context, R.layout.fragment_user_card, objects);
+        super(context, R.layout.user_card, objects);
     }
     
     public ToxFriendAdapter(Context context) {
-        super(context, R.layout.fragment_user_card);
+        super(context, R.layout.user_card);
     }
     
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v;
-        if (convertView != null && convertView.getId() == R.layout.fragment_user_card) {
+        if (convertView != null && convertView.getId() == R.layout.user_card)
             v = convertView; // Reuse the supplied view if possible
-        } else {
-            LayoutInflater infl = LayoutInflater.from(getContext());
-            v = infl.inflate(R.layout.fragment_user_card, parent, false);
-        }
+        else
+            v = Util.newUserCard(LayoutInflater.from(getContext()).inflate(R.layout.user_card, parent, false),
+                    getItem(position));
         
-        return UserCardFragment.setupCard(v, getItem(position));
+        return v;
     }
 }

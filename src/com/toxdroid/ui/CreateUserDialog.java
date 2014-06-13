@@ -35,7 +35,6 @@ public class CreateUserDialog extends DialogFragment {
         /**
          * Called when the user successfully enters the details for an identity in {@link CreateUserDialog}.
          * @param dialog the dialog
-         * @param identity the created identity, with name field set ONLY
          * @param name the new identity's name
          */
         public void call(DialogFragment dialog, String name);
@@ -113,7 +112,7 @@ public class CreateUserDialog extends DialogFragment {
         builder.setTitle(intent == CREATE_LOCAL_IDENTITY ? R.string.add_identity : R.string.add_friend);
         builder.setView(inputView);
         
-        builder.setPositiveButton(R.string.create, null);
+        builder.setPositiveButton(R.string.ok, null);
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
