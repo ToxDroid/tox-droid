@@ -1,6 +1,7 @@
 
 package com.toxdroid.ui;
 
+import com.google.common.base.Preconditions;
 import com.toxdroid.R;
 import com.toxdroid.data.User;
 
@@ -25,7 +26,6 @@ public class UserCardFragment extends Fragment {
     private TextView name;
     private TextView status;
     private ImageView icon;
-    private boolean dark;
     
     public interface OnAttachListener {
         public void onAttach(Fragment fragment);
@@ -33,10 +33,8 @@ public class UserCardFragment extends Fragment {
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = createCard(getActivity(), inflater, container, user, dark);
-        name = (TextView) v.findViewById(R.id.card_name);
-        status = (TextView) v.findViewById(R.id.card_status_message);
-        icon = (ImageView) v.findViewById(R.id.card_status_indicator);
+        View v = inflater.inflate(R.layout.fragment_user_card, container);
+        refreshUserDetails();
         
         return v;
     }
@@ -53,51 +51,49 @@ public class UserCardFragment extends Fragment {
         super.onAttach(activity);
     }
     
-    public static View createCard(Context ctx, View v, User user, boolean dark) {
+    /**
+     * Sets up all the child views to according to the user's details.
+     */
+    public void refreshUserDetails() {
+        UserCardFragment.refresh(getView(), user);
+    }
+    
+    /**
+     * Sets up a user card for a given user.
+     * @param view the view (type must be {@link R.layout.fragment_user_card})
+     * @param user the user
+     * @return the setup view
+     */
+    public static View setupCard(View view, User user) {
+        Preconditions.checkArgument(view.getId() == R.layout.fragment_user_card);
+        
+        refresh(view, user);
+        return view;
+    }
+    
+    private static void refresh(View v, User user) {
         TextView name = (TextView) v.findViewById(R.id.card_name);
         TextView statusMessage = (TextView) v.findViewById(R.id.card_status_message);
         ImageView statusIcon = (ImageView) v.findViewById(R.id.card_status_indicator);
         
-        if (user != null) {
-            name.setText(user.getName());
-            statusMessage.setText(user.getStatusMessage());
-            
-            // Set status icon
-            int icon;
-            ToxUserStatus status = user.getStatus();
-            if (user.isOnline()) {
-                if (status == ToxUserStatus.TOX_USERSTATUS_AWAY) {
-                    icon = R.drawable.ic_away;
-                } else if (status == ToxUserStatus.TOX_USERSTATUS_BUSY) {
-                    icon = R.drawable.ic_busy;
-                } else {
-                    icon = R.drawable.ic_online;
-                }
+        // Set status icon
+        name.setText(user.getName());
+        statusMessage.setText(user.getStatusMessage());
+        
+        int icon;
+        ToxUserStatus status = user.getStatus();
+        if (user.isOnline()) {
+            if (status == ToxUserStatus.TOX_USERSTATUS_AWAY) {
+                icon = R.drawable.ic_away;
+            } else if (status == ToxUserStatus.TOX_USERSTATUS_BUSY) {
+                icon = R.drawable.ic_busy;
             } else {
-                icon = R.drawable.ic_offline;
+                icon = R.drawable.ic_online;
             }
-            statusIcon.setImageResource(icon);
+        } else {
+            icon = R.drawable.ic_offline;
         }
-        
-        /*
-         * if (dark) { // Set special colors for identity card Resources r = ctx.getResources();
-         * v.setBackgroundColor(r.getColor(R.color.bg_identity_card)); name.setTextColor(r.getColor(R.color.white));
-         * statusMessage.setTextColor(r.getColor(R.color.white)); }
-         */
-        
-        return v;
-    }
-    
-    public static View createCard(Context ctx, LayoutInflater infl, ViewGroup parent, User user, boolean dark) {
-        return createCard(ctx, infl.inflate(R.layout.fragment_user_card, parent), user, dark);
-    }
-    
-    public void setDarkTheme(boolean dark) {
-        this.dark = dark;
-    }
-    
-    public boolean isDarkTheme() {
-        return dark;
+        statusIcon.setImageResource(icon);
     }
     
     public void setUser(User user) {

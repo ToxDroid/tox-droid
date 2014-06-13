@@ -40,6 +40,6 @@ public class ToxFriendAdapter extends ArrayAdapter<ToxFriend> {
             v = infl.inflate(R.layout.fragment_user_card, parent, false);
         }
         
-        return UserCardFragment.createCard(getContext(), v, getItem(position), false);
+        return UserCardFragment.setupCard(v, getItem(position));
     }
 }

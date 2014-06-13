@@ -15,6 +15,8 @@ import im.tox.jtoxcore.ToxError;
 import im.tox.jtoxcore.ToxException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -31,8 +33,10 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class FriendListActivity extends ActionBarActivity implements UserCardFragment.OnAttachListener {
     private static final String TAG = "FriendListActivity";
+    private static final int IDENTITY_CARD_UPDATE_PERIOD = 2500;
     private FriendListFragment friendList;
     private UserCardFragment identityCard;
+    private Handler handler;
     
     @Override
     protected void onCreate(Bundle savedState) {
@@ -61,7 +65,17 @@ public class FriendListActivity extends ActionBarActivity implements UserCardFra
         // Setup the fragment before its view is created
         identityCard = (UserCardFragment) fragment;
         identityCard.setUser(App.get(this).getTox().getActiveIdentity());
-        identityCard.setDarkTheme(true);
+        
+        handler = new Handler(Looper.getMainLooper());
+        
+        Runnable updateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                identityCard.refreshUserDetails();
+                handler.postDelayed(this, IDENTITY_CARD_UPDATE_PERIOD);
+            }
+        };
+        handler.postDelayed(updateRunnable, IDENTITY_CARD_UPDATE_PERIOD);
     }
     
     @Override
