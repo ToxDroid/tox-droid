@@ -16,11 +16,11 @@ import java.util.concurrent.TimeoutException;
 
 import com.google.common.base.Preconditions;
 import com.toxdroid.App;
-import com.toxdroid.Util;
 import com.toxdroid.data.Contact;
 import com.toxdroid.data.Database;
 import com.toxdroid.data.Identity;
 import com.toxdroid.data.Message;
+import com.toxdroid.util.Util;
 
 import android.content.ComponentName;
 import android.content.Context;

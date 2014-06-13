@@ -1,5 +1,5 @@
 
-package com.toxdroid;
+package com.toxdroid.util;
 
 import java.io.File;
 import java.io.FileOutputStream;

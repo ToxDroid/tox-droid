@@ -24,7 +24,7 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.io.CharStreams;
 import com.toxdroid.App;
-import com.toxdroid.Util;
+import com.toxdroid.util.Util;
 
 /**
  * A directory of known Tox addresses.

@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.io.ByteStreams;
 import com.toxdroid.App;
-import com.toxdroid.Util;
 import com.toxdroid.data.Database;
 import com.toxdroid.data.DatabaseHelper;
 import com.toxdroid.data.Identity;
+import com.toxdroid.util.Util;
 
 import android.database.Cursor;
 import android.os.Environment;

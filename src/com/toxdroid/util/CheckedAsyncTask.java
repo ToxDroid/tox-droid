@@ -1,5 +1,5 @@
 
-package com.toxdroid;
+package com.toxdroid.util;
 
 import im.tox.jtoxcore.ToxException;
 import android.os.AsyncTask;
@@ -29,13 +29,13 @@ public abstract class CheckedAsyncTask<Params, Progress, Result> extends AsyncTa
     @Override
     protected void onPostExecute(Result result) {
         if (e != null)
-            onFail(e);
+            onFailure(e);
         else
             onSuccess(result);
     }
     
     /**
-     * Identical to {@link #doInBackground(Object...)}, except that any uncaught exception will cause {@link #onFail(Exception)} to be
+     * Identical to {@link #doInBackground(Object...)}, except that any uncaught exception will cause {@link #onFailure(Exception)} to be
      * called during {@link #onPostExecute(Object)}.
      * @param params
      * @return
@@ -56,7 +56,7 @@ public abstract class CheckedAsyncTask<Params, Progress, Result> extends AsyncTa
      * message.
      * @param exception the causing exception
      */
-    protected void onFail(Exception e) {
+    protected void onFailure(Exception e) {
         Log.e("CheckedAsyncTask", e instanceof ToxException ? "Tox library exception "
                 + ((ToxException) e).getError().toString() : "Task failed unexpectedly", e);
     }

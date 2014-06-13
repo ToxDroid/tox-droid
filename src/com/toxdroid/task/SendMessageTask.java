@@ -2,11 +2,11 @@
 package com.toxdroid.task;
 
 import com.toxdroid.App;
-import com.toxdroid.CheckedAsyncTask;
-import com.toxdroid.Util;
 import com.toxdroid.activity.ChatActivity;
 import com.toxdroid.data.Message;
 import com.toxdroid.tox.ToxFriend;
+import com.toxdroid.util.CheckedAsyncTask;
+import com.toxdroid.util.Util;
 
 public class SendMessageTask extends CheckedAsyncTask<Void, Void, Message> {
     private ChatActivity activity;
@@ -40,8 +40,8 @@ public class SendMessageTask extends CheckedAsyncTask<Void, Void, Message> {
     }
     
     @Override
-    protected void onFail(Exception e) {
-        super.onFail(e);
+    protected void onFailure(Exception e) {
+        super.onFailure(e);
         // TODO Show send failure
         // TODO Mark as failed in database
     }

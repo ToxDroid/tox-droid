@@ -16,6 +16,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.toxdroid.data.Database;
 import com.toxdroid.tox.IdentityManager;
 import com.toxdroid.tox.ToxCore;
+import com.toxdroid.util.Util;
 
 import android.app.Application;
 import android.content.Context;

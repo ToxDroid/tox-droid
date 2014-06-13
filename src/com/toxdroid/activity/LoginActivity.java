@@ -5,11 +5,11 @@ import java.net.ConnectException;
 import java.util.ArrayList;
 
 import com.toxdroid.App;
-import com.toxdroid.CheckedAsyncTask;
 import com.toxdroid.R;
 import com.toxdroid.data.Identity;
 import com.toxdroid.ui.CreateUserDialog;
 import com.toxdroid.ui.CreateUserDialog.OnCreateIdentityListener;
+import com.toxdroid.util.CheckedAsyncTask;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -97,11 +97,11 @@ public class LoginActivity extends FragmentActivity implements OnItemClickListen
             }
             
             @Override
-            protected void onFail(Exception e) {
+            protected void onFailure(Exception e) {
                 if (e instanceof ConnectException) {
                     Toast.makeText(LoginActivity.this, R.string.internet_unavailable, Toast.LENGTH_SHORT).show();
                 } else {
-                    super.onFail(e);
+                    super.onFailure(e);
                     Toast.makeText(LoginActivity.this, R.string.login_failed_generic, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -124,8 +124,8 @@ public class LoginActivity extends FragmentActivity implements OnItemClickListen
             }
             
             @Override
-            protected void onFail(Exception e) {
-                super.onFail(e);
+            protected void onFailure(Exception e) {
+                super.onFailure(e);
                 Toast.makeText(LoginActivity.this, R.string.create_identity_failed, Toast.LENGTH_SHORT).show();
             }
         };

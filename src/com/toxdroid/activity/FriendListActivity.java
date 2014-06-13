@@ -2,13 +2,14 @@
 package com.toxdroid.activity;
 
 import com.toxdroid.App;
-import com.toxdroid.CheckedAsyncTask;
 import com.toxdroid.R;
+import com.toxdroid.task.AddFriendTask;
 import com.toxdroid.tox.ToxFriend;
 import com.toxdroid.ui.CreateUserDialog;
 import com.toxdroid.ui.FriendListFragment;
 import com.toxdroid.ui.UserCardFragment;
 import com.toxdroid.ui.CreateUserDialog.OnCreateFriendListener;
+import com.toxdroid.util.CheckedAsyncTask;
 
 import im.tox.jtoxcore.ToxError;
 import im.tox.jtoxcore.ToxException;
@@ -101,48 +102,6 @@ public class FriendListActivity extends ActionBarActivity implements UserCardFra
     }
     
     private CheckedAsyncTask<Object, Void, ToxFriend> newAddFriendTask() {
-        return new CheckedAsyncTask<Object, Void, ToxFriend>() {
-            @Override
-            public ToxFriend checkedDoInBackground(Object... params) throws Exception {
-                String address = (String) params[0];
-                String message = (String) params[1];
-                
-                return App.get(FriendListActivity.this).getTox().addFriend(address, message);
-            }
-            
-            @Override
-            protected void onSuccess(ToxFriend result) {
-                if (result == null)
-                    Toast.makeText(FriendListActivity.this, R.string.friend_already_added, Toast.LENGTH_SHORT).show();
-            }
-            
-            @Override
-            protected void onFail(Exception e) {
-                if (e instanceof ToxException) {
-                    int message = getErrorMessageId(((ToxException) e).getError());
-                    if (message != -1) {
-                        Toast.makeText(FriendListActivity.this, message, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-                super.onFail(e);
-            }
-            
-            private int getErrorMessageId(ToxError error) {
-                switch (error) {
-                case TOX_FAERR_ALREADYSENT:
-                    return R.string.friend_already_added;
-                case TOX_FAERR_OWNKEY:
-                    return R.string.friend_own_key;
-                case TOX_FAERR_SETNEWNOSPAM:
-                    return R.string.friend_new_nospam;
-                case TOX_FAERR_BADCHECKSUM:
-                    return R.string.friend_bad_checksum;
-                case TOX_FAERR_NOMESSAGE: // This can't happen
-                default:
-                    return -1;
-                }
-            }
-        };
+        return new AddFriendTask(this);
     }
 }

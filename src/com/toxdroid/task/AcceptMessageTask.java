@@ -4,12 +4,12 @@ package com.toxdroid.task;
 import java.util.concurrent.TimeUnit;
 
 import com.toxdroid.App;
-import com.toxdroid.CheckedAsyncTask;
-import com.toxdroid.Util;
 import com.toxdroid.activity.ChatActivity;
 import com.toxdroid.data.Database;
 import com.toxdroid.data.Message;
 import com.toxdroid.tox.ToxFriend;
+import com.toxdroid.util.CheckedAsyncTask;
+import com.toxdroid.util.Util;
 
 import android.widget.ListView;
 

@@ -1,9 +1,7 @@
 
-package com.toxdroid;
+package com.toxdroid.data;
 
 import java.util.concurrent.Callable;
-
-import com.toxdroid.data.Database;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;

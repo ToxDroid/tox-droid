@@ -6,15 +6,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.toxdroid.CheckedAsyncTask;
 import com.toxdroid.R;
-import com.toxdroid.Util;
 import com.toxdroid.activity.ChatActivity;
 import com.toxdroid.data.Chat;
 import com.toxdroid.data.Database;
 import com.toxdroid.data.DatabaseHelper;
 import com.toxdroid.data.Message;
 import com.toxdroid.ui.TextChatFragment;
+import com.toxdroid.util.CheckedAsyncTask;
+import com.toxdroid.util.Util;
 
 import android.database.Cursor;
 import android.util.Log;
@@ -93,8 +93,8 @@ public class LoadChatTask extends CheckedAsyncTask<Long, Void, List<Message>> {
     }
     
     @Override
-    public void onFail(Exception e) {
-        super.onFail(e);
+    public void onFailure(Exception e) {
+        super.onFailure(e);
         
         Toast.makeText(activity, R.string.activity_chat_load_fail, Toast.LENGTH_SHORT).show();
         activity.finish();

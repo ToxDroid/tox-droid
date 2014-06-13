@@ -9,8 +9,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import com.toxdroid.DatabaseCallable;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -18,6 +16,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class Database {
+    private static final String TAG = "Database";
     private DatabaseHelper helper;
     private ExecutorService executor = Executors.newCachedThreadPool();
     
@@ -48,7 +47,7 @@ public class Database {
                         SQLiteDatabase conn = getConnection(false);
                         return conn.query(table, columns, where, whereArgs, null, null, orderBy);
                     } catch (Exception e) {
-                        Log.e("DatabaseCallable", "Exception in database task", e); // hack
+                        Log.e(TAG, "Exception in select task", e);
                         throw e;
                     }
                 }
