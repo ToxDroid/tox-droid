@@ -50,7 +50,6 @@ public class ToxService extends Service {
     @Override
     public void onDestroy() {
         runner.shutdown();
-        super.onDestroy();
     }
     
     @Override

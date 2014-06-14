@@ -4,7 +4,7 @@
     <color name="white">#FFF</color>
     <color name="bg_chat_history">#DDD</color>
     <color name="bg_button_light">#292425</color>
-    <color name="fg_highlight">#789ead</color>
+    <color name="fg_highlight">#9abfcf</color>
     <color name="fg_highlight_darker">#678f9c</color>
     
 </resources>

@@ -13,9 +13,12 @@ import im.tox.jtoxcore.callbacks.OnUserStatusCallback;
 import com.toxdroid.App;
 import com.toxdroid.R;
 import com.toxdroid.activity.ChatActivity;
+import com.toxdroid.activity.LoginActivity;
+import com.toxdroid.data.Contact;
+import com.toxdroid.data.Identity;
+import com.toxdroid.data.User;
 import com.toxdroid.task.AddFriendTask;
 import com.toxdroid.tox.FriendList;
-import com.toxdroid.tox.ToxFriend;
 import com.toxdroid.ui.CreateUserDialog.OnCreateFriendListener;
 import com.toxdroid.ui.adapter.ToxFriendAdapter;
 
@@ -27,12 +30,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class FriendListFragment extends Fragment {
+public class FriendListFragment extends Fragment implements OnItemLongClickListener, OnItemClickListener {
     private ListView friendList;
     private ToxFriendAdapter adapter;
     private Listener listener = new Listener();
@@ -40,9 +46,9 @@ public class FriendListFragment extends Fragment {
     /**
      * Boilerplate to update the friend list as soon as an update is found.
      */
-    private class Listener implements Observer, OnConnectionStatusCallback<ToxFriend>,
-        OnNameChangeCallback<ToxFriend>, OnStatusMessageCallback<ToxFriend>,
-        OnUserStatusCallback<ToxFriend> {
+    private class Listener implements Observer, OnConnectionStatusCallback<Contact>,
+        OnNameChangeCallback<Contact>, OnStatusMessageCallback<Contact>,
+        OnUserStatusCallback<Contact> {
         
         private Handler handler = new Handler(Looper.getMainLooper());
         private Runnable update = new Runnable() {
@@ -53,17 +59,17 @@ public class FriendListFragment extends Fragment {
         };
 
         @Override
-        public void execute(ToxFriend friend, ToxUserStatus status) {
+        public void execute(Contact friend, ToxUserStatus status) {
             handler.post(update);
         }
 
         @Override
-        public void execute(ToxFriend friend, String something) {
+        public void execute(Contact friend, String something) {
             handler.post(update);
         }
 
         @Override
-        public void execute(ToxFriend friend, boolean online) {
+        public void execute(Contact friend, boolean online) {
             handler.post(update);
         }
 
@@ -88,26 +94,34 @@ public class FriendListFragment extends Fragment {
         friendList.setAdapter(adapter);
         data.addObserver(listener);
         
-        CallbackHandler<ToxFriend> callbacks = app.getTox().getCallbacks();
+        CallbackHandler<Contact> callbacks = app.getTox().getCallbacks();
         callbacks.registerOnNameChangeCallback(listener);
         callbacks.registerOnConnectionStatusCallback(listener);
         callbacks.registerOnStatusMessageCallback(listener);
         callbacks.registerOnUserStatusCallback(listener);
         
-        // Add an item listener to launch ChatActivity
-        friendList.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startChatActivity((ToxFriend) parent.getItemAtPosition(position));
-            }
-        });
+        friendList.setOnItemClickListener(this);
+        friendList.setOnItemLongClickListener(this);
         
         return v;
     }
-    
-    private void startChatActivity(ToxFriend friend) {
+
+    /*
+     * Callbacks
+     */
+    @Override
+    public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
         Intent intent = new Intent(getActivity(), ChatActivity.class);
-        intent.putExtra(ChatFragment.ARG_FRIEND, friend.getFriendnumber());
+        intent.putExtra(ChatFragment.ARG_FRIEND, ((Contact) adapter.getItemAtPosition(pos)).getFriendnumber());
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapter, View view, int pos, long id) {
+        UserDetailsDialog dialog = new UserDetailsDialog();
+        dialog.setUser((User) adapter.getItemAtPosition(pos));
+        dialog.show(getActivity().getSupportFragmentManager(), "friend_details_dialog");
+        
+        return true;
     }
 }

@@ -68,6 +68,15 @@ public class Database {
         });
     }
     
+    public Future<Integer> update(final DatabaseRecord record, final String where, final String[] whereArgs) {
+        return submit(new DatabaseCallable<Integer>(this, true) {
+            @Override
+            public Integer doCall(SQLiteDatabase conn) throws Exception {
+                return conn.update(record.getTable(), record.asValues(), where, whereArgs);
+            }
+        });
+    }
+    
     public void shutdown() {
         executor.shutdown();
     }

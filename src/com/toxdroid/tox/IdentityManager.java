@@ -66,6 +66,7 @@ public class IdentityManager {
         try {
             Identity identity = new Identity();
             identity.setName(name);
+            identity.setDateAdded(Util.timeAsISO8601());
             identity.setId(db.insert(identity).get(db.getDefaultTimeout(), TimeUnit.MILLISECONDS));
             
             identities.add(identity);

@@ -33,12 +33,6 @@ public class HomeActivity extends FragmentActivity {
     	card.setUser(App.get(this).getTox().getActiveIdentity());
     }
     
-    @Override
-    protected void onPause() {
-        super.onPause();
-        App.get(this).getTox().save();
-    }
-    
     /*
      * Button callbacks
      */

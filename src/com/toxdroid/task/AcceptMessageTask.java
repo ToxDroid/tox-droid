@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import com.toxdroid.App;
 import com.toxdroid.data.Database;
 import com.toxdroid.data.Message;
-import com.toxdroid.tox.ToxFriend;
+import com.toxdroid.data.Contact;
 import com.toxdroid.ui.ChatFragment;
 import com.toxdroid.util.CheckedAsyncTask;
 import com.toxdroid.util.Util;
@@ -20,14 +20,14 @@ public class AcceptMessageTask extends CheckedAsyncTask<Object, Void, Message> {
     
     @Override
     public Message checkedDoInBackground(Object... params) throws Exception {
-        ToxFriend friend = (ToxFriend) params[0];
+        Contact friend = (Contact) params[0];
         String body = (String) params[1];
         Database db = App.get(fragment.getActivity()).getDatabase();
         
         Message message = new Message();
         message.setBody(body);
         message.setChat(fragment.getChat().getId());
-        message.setSender(friend.getUserId());
+        message.setSender(friend.getDatabaseId());
         message.setPosition(fragment.nextMessagePos());
         message.setTimestamp(Util.timeAsISO8601());
         message.setId(db.insert(message).get(db.getDefaultTimeout(), TimeUnit.MILLISECONDS));

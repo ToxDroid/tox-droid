@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.toxdroid.App;
 import com.toxdroid.tox.NodeDirectory.Node;
 
 import android.util.Log;
@@ -133,12 +134,12 @@ public class ToxRunner {
     
     /**
      * Call this to cleanly shutdown Tox.
-     * @throws ToxException
      */
     public void shutdown() {
         timer.cancel();
         running = false;
         
+        tox.save();
         try {
             tox.killTox();
         } catch (ToxException e) {

@@ -2,9 +2,9 @@
 package com.toxdroid.task;
 
 import com.toxdroid.App;
+import com.toxdroid.data.Contact;
 import com.toxdroid.data.Message;
 import com.toxdroid.tox.ToxCore;
-import com.toxdroid.tox.ToxFriend;
 import com.toxdroid.ui.ChatFragment;
 import com.toxdroid.util.CheckedAsyncTask;
 import com.toxdroid.util.Util;
@@ -18,7 +18,7 @@ public class SendMessageTask extends CheckedAsyncTask<Object, Void, Message> {
     
     @Override
     public Message checkedDoInBackground(Object... params) throws Exception {
-        ToxFriend friend = (ToxFriend) params[0];
+        Contact friend = (Contact) params[0];
         String body = (String) params[1];
         
         ToxCore tox = App.get(fragment.getActivity()).getTox();

@@ -4,7 +4,7 @@ package com.toxdroid.ui.adapter;
 import java.util.List;
 
 import com.toxdroid.R;
-import com.toxdroid.tox.ToxFriend;
+import com.toxdroid.data.Contact;
 import com.toxdroid.ui.UserCardFragment;
 import com.toxdroid.util.Util;
 
@@ -18,12 +18,12 @@ import android.widget.ArrayAdapter;
  * A list adapter for ToxFriends.
  * 
  */
-public class ToxFriendAdapter extends ArrayAdapter<ToxFriend> {
-    public ToxFriendAdapter(Context context, List<ToxFriend> objects) {
+public class ToxFriendAdapter extends ArrayAdapter<Contact> {
+    public ToxFriendAdapter(Context context, List<Contact> objects) {
         super(context, R.layout.user_card, objects);
     }
     
-    public ToxFriendAdapter(Context context, ToxFriend[] objects) {
+    public ToxFriendAdapter(Context context, Contact[] objects) {
         super(context, R.layout.user_card, objects);
     }
     

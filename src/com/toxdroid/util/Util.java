@@ -7,14 +7,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -146,6 +149,36 @@ public class Util {
      */
     public static String timeAsISO8601() {
         return timeAsISO8601(new Date());
+    }
+    
+    /**
+     * Converts the given ISO8601 date into a Date object.
+     * @param iso8601 the date string
+     * @return the date
+     */
+    @SuppressLint("SimpleDateFormat") 
+    public static Date timeFromISO8601(String iso8601) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+        
+        try {
+            return df.parse(iso8601);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
+     * Converts the given ISO8601 date into a localized string.
+     * @param iso8601 the date string
+     * @param style the style (from SimpleDataFormat)
+     * @param locale the locale
+     * @return the localized and formatted date string
+     */
+    @SuppressLint("SimpleDateFormat") 
+    public static String timeFromISO8601(String iso8601, int style, Locale locale) {
+        Date date = timeFromISO8601(iso8601);
+        return SimpleDateFormat.getDateInstance(style, locale).format(date);
     }
     
     /**

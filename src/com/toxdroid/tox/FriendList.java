@@ -16,6 +16,7 @@ import android.os.Looper;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.toxdroid.data.Contact;
 import com.toxdroid.util.Util;
 
 /**
@@ -23,17 +24,17 @@ import com.toxdroid.util.Util;
  * 
  * 
  */
-public class FriendList extends Observable implements im.tox.jtoxcore.FriendList<ToxFriend> {
+public class FriendList extends Observable implements im.tox.jtoxcore.FriendList<Contact> {
     /**
      * The main friend list collection. Access to this field is thread-safe.
      */
-    private List<ToxFriend> friends = Collections.synchronizedList(new ArrayList<ToxFriend>());
+    private List<Contact> friends = Collections.synchronizedList(new ArrayList<Contact>());
     
     /**
      * A copy of the friend list, with some differences. Firstly, updates to this collection are always on the UI thread. Secondly, any
      * observers of this class will be notified immediately after it is updated. This collection is intended for use with an adapter.
      */
-    private List<ToxFriend> friendsUi = Collections.synchronizedList(new ArrayList<ToxFriend>());
+    private List<Contact> friendsUi = Collections.synchronizedList(new ArrayList<Contact>());
     
     /**
      * A handler which runs on the UI thread.
@@ -41,11 +42,11 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
     private Handler uiHandler = new Handler(Looper.getMainLooper());
     
     @Override
-    public ToxFriend addFriend(int fn) throws FriendExistsException {
+    public Contact addFriend(int fn) throws FriendExistsException {
         if (getByFriendNumber(fn) != null)
             throw new FriendExistsException(fn);
         
-        final ToxFriend friend = new ToxFriend(fn);
+        final Contact friend = new Contact(fn);
         friends.add(getInsertIndex(friend), friend);
         
         // Update the UI list and notify observers
@@ -60,9 +61,9 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
     }
     
     @Override
-    public ToxFriend addFriendIfNotExists(int fn) {
+    public Contact addFriendIfNotExists(int fn) {
         try {
-            ToxFriend out = getByFriendNumber(fn);
+            Contact out = getByFriendNumber(fn);
             return out == null ? addFriend(fn) : out;
         } catch (FriendExistsException e) {
             throw new AssertionError();
@@ -71,7 +72,7 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
     
     @Override
     public void removeFriend(int fn) {
-        final ToxFriend target = getByFriendNumber(fn);
+        final Contact target = getByFriendNumber(fn);
         friends.remove(target);
         
         uiHandler.post(new Runnable() {
@@ -98,11 +99,11 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
         });
     }
     
-    private int getInsertIndex(ToxFriend friend) {
+    private int getInsertIndex(Contact friend) {
         synchronized (friends) {
-            return 1 + Collections.binarySearch(friends, friend, new Comparator<ToxFriend>() {
+            return 1 + Collections.binarySearch(friends, friend, new Comparator<Contact>() {
                 @Override
-                public int compare(ToxFriend lhs, ToxFriend rhs) {
+                public int compare(Contact lhs, Contact rhs) {
                     return Util.compare(lhs.getFriendnumber(), rhs.getFriendnumber());
                 }
             });
@@ -118,9 +119,9 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
         final String publicKey = ToxCore.getPublicKey(toxId);
         
         synchronized (friends) {
-            ToxFriend existing = Iterables.find(friends, new Predicate<ToxFriend>() {
+            Contact existing = Iterables.find(friends, new Predicate<Contact>() {
                 @Override
-                public boolean apply(ToxFriend friend) {
+                public boolean apply(Contact friend) {
                     return ToxCore.getPublicKey(friend.getId()).equals(publicKey);
                 }
             }, null);
@@ -130,20 +131,20 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
     }
     
     @Override
-    public List<ToxFriend> all() {
+    public List<Contact> all() {
         return Collections.unmodifiableList(friends);
     }
     
-    public List<ToxFriend> allUi() {
+    public List<Contact> allUi() {
         return Collections.unmodifiableList(friendsUi);
     }
     
     @Override
-    public ToxFriend getByFriendNumber(final int fn) {
+    public Contact getByFriendNumber(final int fn) {
         synchronized (friends) {
-            return Iterables.find(friends, new Predicate<ToxFriend>() {
+            return Iterables.find(friends, new Predicate<Contact>() {
                 @Override
-                public boolean apply(ToxFriend friend) {
+                public boolean apply(Contact friend) {
                     return friend.getFriendnumber() == fn;
                 }
             }, null);
@@ -151,22 +152,22 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
     }
     
     @Override
-    public ToxFriend getById(final String id) {
+    public Contact getById(final String id) {
         synchronized (friends) {
-            return Iterables.find(friends, new Predicate<ToxFriend>() {
+            return Iterables.find(friends, new Predicate<Contact>() {
                 @Override
-                public boolean apply(ToxFriend friend) {
+                public boolean apply(Contact friend) {
                     return friend.getId().equals(id);
                 }
             }, null);
         }
     }
     
-    public List<ToxFriend> getByOnlineStatus(final boolean online) {
+    public List<Contact> getByOnlineStatus(final boolean online) {
         synchronized (friends) {
-            return Lists.newArrayList(Iterables.filter(friends, new Predicate<ToxFriend>() {
+            return Lists.newArrayList(Iterables.filter(friends, new Predicate<Contact>() {
                 @Override
-                public boolean apply(ToxFriend friend) {
+                public boolean apply(Contact friend) {
                     return friend.isOnline() == online;
                 }
             }));
@@ -174,11 +175,11 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
     }
     
     @Override
-    public List<ToxFriend> getByName(final String name, final boolean ignorecase) {
+    public List<Contact> getByName(final String name, final boolean ignorecase) {
         synchronized (friends) {
-            return Lists.newArrayList(Iterables.filter(friends, new Predicate<ToxFriend>() {
+            return Lists.newArrayList(Iterables.filter(friends, new Predicate<Contact>() {
                 @Override
-                public boolean apply(ToxFriend friend) {
+                public boolean apply(Contact friend) {
                     String compare = friend.getName();
                     if (ignorecase)
                         compare.toLowerCase();
@@ -190,11 +191,11 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
     }
     
     @Override
-    public List<ToxFriend> searchFriend(final String partial) {
+    public List<Contact> searchFriend(final String partial) {
         synchronized (friends) {
-            return Lists.newArrayList(Iterables.filter(friends, new Predicate<ToxFriend>() {
+            return Lists.newArrayList(Iterables.filter(friends, new Predicate<Contact>() {
                 @Override
-                public boolean apply(ToxFriend friend) {
+                public boolean apply(Contact friend) {
                     return friend.getName().contains(partial);
                 }
             }));
@@ -202,11 +203,11 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
     }
     
     @Override
-    public List<ToxFriend> getByStatus(final ToxUserStatus status) {
+    public List<Contact> getByStatus(final ToxUserStatus status) {
         synchronized (friends) {
-            return Lists.newArrayList(Iterables.filter(friends, new Predicate<ToxFriend>() {
+            return Lists.newArrayList(Iterables.filter(friends, new Predicate<Contact>() {
                 @Override
-                public boolean apply(ToxFriend friend) {
+                public boolean apply(Contact friend) {
                     return friend.getStatus().equals(status);
                 }
             }));
@@ -214,12 +215,12 @@ public class FriendList extends Observable implements im.tox.jtoxcore.FriendList
     }
     
     @Override
-    public List<ToxFriend> getOnlineFriends() {
+    public List<Contact> getOnlineFriends() {
         return getByOnlineStatus(true);
     }
     
     @Override
-    public List<ToxFriend> getOfflineFriends() {
+    public List<Contact> getOfflineFriends() {
         return getByOnlineStatus(false);
     }
 }

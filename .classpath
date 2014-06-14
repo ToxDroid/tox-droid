@@ -7,5 +7,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="lib" path="libs/guava-17.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jToxcore.jar"/>
+	<classpathentry kind="lib" path="libs/nineoldandroids-2.4.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

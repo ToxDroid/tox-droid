@@ -13,7 +13,7 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "toxdroid.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
     
     public static final String TABLE_CONTACT = "contact";
     public static final String TABLE_IDENTITY = "identity";
@@ -27,11 +27,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE contact (_id INTEGER PRIMARY KEY AUTOINCREMENT," // Known users
+                + "identity INTEGER NOT NULL REFERENCES identity (_id) ON DELETE CASCADE," // The local identity who knows this contact
                 + "friendn INTEGER DEFAULT NULL," // Their friend number (null if not a friend)
-                + "name TEXT);"); // Their name (only applicable if they aren't a friend)
+                + "name TEXT," // Their name (only applicable if they aren't a friend)
+                + "address TEXT NOT NULL,"
+                + "added TEXT NOT NULL);");
         
         db.execSQL("CREATE TABLE identity (_id INTEGER PRIMARY KEY AUTOINCREMENT," // A local user identity
-                + "name TEXT NOT NULL);");
+                + "name TEXT NOT NULL,"
+                + "address TEXT,"
+                + "added TEXT NOT NULL);");
         
         db.execSQL("CREATE TABLE chat (_id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "me INTEGER NOT NULL REFERENCES identity (_id) ON DELETE CASCADE," // Our user details
@@ -40,7 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         
         db.execSQL("CREATE TABLE message (_id INTEGER PRIMARY KEY,"
                 + "chat INTEGER REFERENCES chat (_id) ON DELETE CASCADE,"
-                + "sender INTEGER NOT NULL REFERENCES user (_id) ON DELETE CASCADE," + "body TEXT NOT NULL,"
+                + "sender INTEGER NOT NULL REFERENCES user (_id) ON DELETE CASCADE," 
+                + "body TEXT NOT NULL,"
                 + "timestamp TEXT NOT NULL," // Time as ISO8601 string ("YYYY-MM-DD HH:MM:SS.SSS")
                 + "pos INTEGER NOT NULL);");
     }

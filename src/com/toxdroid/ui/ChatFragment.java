@@ -8,11 +8,11 @@ import com.google.common.base.Preconditions;
 import com.toxdroid.App;
 import com.toxdroid.R;
 import com.toxdroid.data.Chat;
+import com.toxdroid.data.Contact;
 import com.toxdroid.data.Message;
 import com.toxdroid.task.AcceptMessageTask;
 import com.toxdroid.task.LoadChatTask;
 import com.toxdroid.task.SendMessageTask;
-import com.toxdroid.tox.ToxFriend;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,10 +25,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChatFragment extends Fragment implements OnMessageCallback<ToxFriend> {
+public class ChatFragment extends Fragment implements OnMessageCallback<Contact> {
     public static final String ARG_FRIEND = "friend";
     
-    private ToxFriend friend;
+    private Contact friend;
     private Chat chat;
     private AtomicLong nextMessagePos = new AtomicLong(0);
     
@@ -44,7 +44,7 @@ public class ChatFragment extends Fragment implements OnMessageCallback<ToxFrien
         Preconditions.checkNotNull(friend, "Must set friend before onCreate");
     
         LoadChatTask task = new LoadChatTask(this);
-        task.execute(friend.getUserId()); // TODO Execute on async executor
+        task.execute(friend.getDatabaseId()); // TODO Execute on async executor
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ChatFragment extends Fragment implements OnMessageCallback<ToxFrien
     }
     
     @Override
-    public void execute(ToxFriend friend, String body) {
+    public void execute(Contact friend, String body) {
         new AcceptMessageTask(this).execute(friend, body);
     }
     
@@ -116,7 +116,8 @@ public class ChatFragment extends Fragment implements OnMessageCallback<ToxFrien
         return chat;
     }
     
-    public void setFriend(ToxFriend friend) {
+    public void setFriend(Contact friend) {
+        Preconditions.checkArgument(friend.isFriend());
         this.friend = friend;
     }
     

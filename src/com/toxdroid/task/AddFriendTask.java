@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import com.toxdroid.App;
 import com.toxdroid.R;
-import com.toxdroid.tox.ToxFriend;
+import com.toxdroid.data.Contact;
 import com.toxdroid.util.CheckedAsyncTask;
 
 /**
@@ -14,7 +14,7 @@ import com.toxdroid.util.CheckedAsyncTask;
  *
  *
  */
-public class AddFriendTask extends CheckedAsyncTask<String, Void, ToxFriend> {
+public class AddFriendTask extends CheckedAsyncTask<String, Void, Contact> {
     private App app;
     
     public AddFriendTask(App app) {
@@ -22,12 +22,12 @@ public class AddFriendTask extends CheckedAsyncTask<String, Void, ToxFriend> {
     }
     
     @Override
-    public ToxFriend checkedDoInBackground(String... params) throws Exception {
+    public Contact checkedDoInBackground(String... params) throws Exception {
         return app.getTox().addFriend(params[0], params[1]);
     }
     
     @Override
-    protected void onSuccess(ToxFriend result) {
+    protected void onSuccess(Contact result) {
         if (result == null)
             Toast.makeText(app, R.string.friend_already_added, Toast.LENGTH_SHORT).show();
     }
