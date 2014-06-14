@@ -10,9 +10,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -29,6 +34,7 @@ public class CreateUserDialog extends DialogFragment {
     private EditText nameField;
     private EditText addressField;
     private EditText messageField;
+    private TextView characterCount;
     private int intent;
     
     public interface OnCreateIdentityListener {
@@ -68,9 +74,13 @@ public class CreateUserDialog extends DialogFragment {
         nameField = (EditText) inputView.findViewById(R.id.identity_add_name);
         addressField = (EditText) inputView.findViewById(R.id.user_add_public_key);
         messageField = (EditText) inputView.findViewById(R.id.user_add_message);
+        characterCount = (TextView) inputView.findViewById(R.id.character_count);
         
-        if (addressField != null)
+        if (addressField != null) {
+            addressField.setFilters(new InputFilter[] { new InputFilter.LengthFilter(ToxCore.TOX_TOXID_LENGTH) });
+            addressField.addTextChangedListener(new TextCounter("%s / " + ToxCore.TOX_TOXID_LENGTH, characterCount));
             addressField.setText("56A1ADE4B65B86BCD51CC73E2CD4E542179F47959FE3E0E21B4B0ACDADE51855D34D34D37CB5"); // TODO Remove
+        }
             
         return buildDialog(inputView);
     }

@@ -8,14 +8,22 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
 
+    <TextView
+        android:id="@+id/character_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="@string/placeholder"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
     <EditText
         android:id="@+id/user_add_public_key"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/address"
-        android:typeface="monospace"
-        android:inputType="textCapCharacters" />
+        android:inputType="textCapCharacters"
+        android:typeface="monospace" />
 
     <EditText
         android:id="@+id/user_add_message"
